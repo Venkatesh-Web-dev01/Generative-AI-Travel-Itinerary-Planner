@@ -229,10 +229,11 @@ template. They are **not** verified against live, current sources. Always
 confirm prices, hours, and availability directly with the destination /
 venue before you travel.
 
-┌───────────────────────┐
+
                      │   User Trip Inputs    │
                      │ (Budget, Dates, etc.) │
-                     └───────────┬──────────Here is an alternative, streamlined version of your README file designed to be punchy and developer-focused, followed by the logical expressions and an architectural flow diagram of your application.
+                     
+Here is an alternative, streamlined version of your README file designed to be punchy and developer-focused, followed by the logical expressions and an architectural flow diagram of your application.
 
 ### Alternative README Content
 
