@@ -282,3 +282,38 @@ graph TD
     
     J -->|Click Export Calendar| N[calendar_export.py <br> .ics Builder]
     N --> O[Download .ics]
+
+Core Logical Expressions
+Here are the primary logical conditions that drive the application's backend behavior:
+
+1. Execution Mode Logic (Online vs. Offline)
+
+    IF (GOOGLE_API_KEY is Valid) AND (Internet Connection == True)
+    Execution_Mode = "Gemini_API"
+    LLM_Response = fetch_gemini_itinerary(User_Inputs)
+ELSE
+    Execution_Mode = "Offline_Fallback"
+    LLM_Response = generate_static_demo(User_Inputs)
+END IF
+
+2. Budget Constraint Logic
+Total_Estimated_Cost = SUM(Accommodation + Transport + Food + Activities + Misc)
+
+IF (Total_Estimated_Cost > User_Budget)
+    Budget_Status = "Exceeded"
+    Trigger_UI_Warning("Your estimated cost exceeds your budget by: " + (Total_Estimated_Cost - User_Budget))
+ELSE
+    Budget_Status = "Within Budget"
+END IF
+
+3. Chat Refinement State Logic
+
+IF (User_Submits_Chat_Prompt)
+    IF (Execution_Mode == "Gemini_API")
+        New_Itinerary = Gemini_Modify(Current_Session_Itinerary, Chat_Prompt)
+        Current_Session_Itinerary = New_Itinerary
+    ELSE IF (Execution_Mode == "Offline_Fallback" AND Chat_Prompt IN Allowed_Offline_Commands)
+        New_Itinerary = Apply_Hardcoded_Modification(Current_Session_Itinerary, Chat_Prompt)
+        Current_Session_Itinerary = New_Itinerary
+    END IF
+END IF
