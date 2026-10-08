@@ -255,3 +255,30 @@ An intelligent, Streamlit-based web application that transforms basic travel par
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+
+graph TD
+    A[User Inputs: Destination, Budget, Dates] --> B{Is Gemini API Key Provided?}
+    
+    B -- Yes --> C[itinerary_generator.py <br> Google Gemini API]
+    B -- No --> D[itinerary_generator.py <br> Offline Fallback Demo]
+    
+    C --> E[Generate JSON/Structured Itinerary]
+    D --> E
+    
+    E --> F{Total Cost > Budget?}
+    F -- Yes --> G[Streamlit UI: Display Warning]
+    F -- No --> H[Streamlit UI: Display Success]
+    
+    G --> I[Render Day-by-Day Itinerary]
+    H --> I
+    
+    I --> J[User Action]
+    
+    J -->|Chat Prompt| K[Refine Itinerary]
+    K --> C
+    
+    J -->|Click Export PDF| L[pdf_export.py <br> ReportLab Generation]
+    L --> M[Download .pdf]
+    
+    J -->|Click Export Calendar| N[calendar_export.py <br> .ics Builder]
+    N --> O[Download .ics]
