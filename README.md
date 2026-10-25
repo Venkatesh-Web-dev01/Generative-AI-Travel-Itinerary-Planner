@@ -6,47 +6,12 @@ activities, food recommendations, transportation logistics, and a budget
 breakdown. Refine the plan through a natural-language chat interface, then
 export it as a PDF or a calendar (`.ics`) file.
 
-## Project Overview
+## 🔀 System Logic & Edge Cases
 
-You fill in a short trip-planning form (destination, dates, budget,
-travelers, interests, travel style, food and transport preferences). The
-app uses the Google Gemini API to generate a structured itinerary — morning,
-afternoon, and evening activities each day, food recommendations, transport
-logistics, and an estimated budget breakdown. You can then chat with the AI
-to tweak the plan ("Make day 2 less packed", "Add a beach activity on day
-3", "Reduce the budget") without losing the rest of your itinerary, and
-finally export the result as a shareable PDF or import it into your
-calendar app.
-
-## Features
-
-- **Trip planning form** — destination, starting location, travel dates,
-  duration, budget, number of travelers, interests, travel style, food
-  preference, accommodation preference, and transportation preference.
-- **Popular destination quick-pick** — optional dropdown (backed by
-  `data/sample_destinations.csv`) to prefill the destination field.
-- **AI itinerary generation** — day-by-day plan with morning/afternoon/
-  evening activities, food recommendations, transportation logistics, and a
-  suggested visiting order to avoid backtracking.
-- **Interest-based personalization** — activities are prioritized to match
-  your selected interests (Food, History, Culture, Adventure, Beaches, etc.).
-- **Budget management** — a full cost breakdown (accommodation, food,
-  transportation, activities, shopping, miscellaneous) with a clear warning
-  if the estimated cost exceeds your budget.
-- **AI chat refinement** — a chat box below the itinerary lets you modify it
-  with plain-English requests; the rest of the plan is preserved unless your
-  request requires a change.
-- **Session state management** — your itinerary, inputs, and chat history
-  persist across interactions within the same session.
-- **PDF export** — a professional, shareable PDF built with ReportLab.
-- **Calendar export** — a standard `.ics` file with one event per activity,
-  importable into Google Calendar, Outlook, Apple Calendar, etc.
-- **Offline fallback mode** — no Gemini API key? The app still generates a
-  complete demo itinerary and supports a handful of common chat edits, so
-  you can try the whole workflow immediately.
-- **Friendly error handling** — invalid dates, negative budgets, empty
-  destinations, API errors, and export failures all show clear messages
-  instead of crashing the app.
+- **Date & Duration Parsing:** Ensures end dates follow start dates and automatically calculates total trip duration.
+- **Budget Monitoring:** Dynamically compares estimated activity/accommodation costs against target budget, displaying visual warnings when limits are exceeded.
+- **Incremental Refinement:** Chat edits target specific days or activities without wiping existing session data.
+- **Export Guards:** Export functionalities (PDF/.ics) are conditionally enabled only after a valid itinerary payload is generated.
 
 ## Technology Stack
 
@@ -248,72 +213,17 @@ An intelligent, Streamlit-based web application that transforms basic travel par
 * **Export Ready:** Generate professional PDFs (via ReportLab) or `.ics` calendar files seamlessly.
 * **Resilient Architecture:** Built-in offline fallback mode ensures the app functions perfectly for demos even without a Gemini API key.
 
-## 🛠️ Quick Start
-
-**1. Clone & Environment Setup**
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-graph TD
-    A[User Inputs: Destination, Budget, Dates] --> B{Is Gemini API Key Provided?}
-    
-    B -- Yes --> C[itinerary_generator.py <br> Google Gemini API]
-    B -- No --> D[itinerary_generator.py <br> Offline Fallback Demo]
-    
-    C --> E[Generate JSON/Structured Itinerary]
-    D --> E
-    
-    E --> F{Total Cost > Budget?}
-    F -- Yes --> G[Streamlit UI: Display Warning]
-    F -- No --> H[Streamlit UI: Display Success]
-    
-    G --> I[Render Day-by-Day Itinerary]
-    H --> I
-    
-    I --> J[User Action]
-    
-    J -->|Chat Prompt| K[Refine Itinerary]
-    K --> C
-    
-    J -->|Click Export PDF| L[pdf_export.py <br> ReportLab Generation]
-    L --> M[Download .pdf]
-    
-    J -->|Click Export Calendar| N[calendar_export.py <br> .ics Builder]
-    N --> O[Download .ics]
-
-Core Logical Expressions
-Here are the primary logical conditions that drive the application's backend behavior:
-
-1. Execution Mode Logic (Online vs. Offline)
-
-    IF (GOOGLE_API_KEY is Valid) AND (Internet Connection == True)
-    Execution_Mode = "Gemini_API"
-    LLM_Response = fetch_gemini_itinerary(User_Inputs)
-ELSE
-    Execution_Mode = "Offline_Fallback"
-    LLM_Response = generate_static_demo(User_Inputs)
-END IF
-
-2. Budget Constraint Logic
-Total_Estimated_Cost = SUM(Accommodation + Transport + Food + Activities + Misc)
-
-IF (Total_Estimated_Cost > User_Budget)
-    Budget_Status = "Exceeded"
-    Trigger_UI_Warning("Your estimated cost exceeds your budget by: " + (Total_Estimated_Cost - User_Budget))
-ELSE
-    Budget_Status = "Within Budget"
-END IF
-
-3. Chat Refinement State Logic
-
-IF (User_Submits_Chat_Prompt)
-    IF (Execution_Mode == "Gemini_API")
-        New_Itinerary = Gemini_Modify(Current_Session_Itinerary, Chat_Prompt)
-        Current_Session_Itinerary = New_Itinerary
-    ELSE IF (Execution_Mode == "Offline_Fallback" AND Chat_Prompt IN Allowed_Offline_Commands)
-        New_Itinerary = Apply_Hardcoded_Modification(Current_Session_Itinerary, Chat_Prompt)
-        Current_Session_Itinerary = New_Itinerary
-    END IF
-END IF
+[ User Input Form / Quick-Pick ]
+               │
+               ▼
+   [ Streamlit Session State ] ──(Pushes Inputs)──► [ Gemini API Prompt Builder ]
+                                                              │
+                                                              ▼
+   [ Session State (Itinerary) ] ◄──(Structured JSON/Text)── [ Gemini API Response ]
+               │
+    ┌──────────┼─────────────────────────┐
+    ▼          ▼                         ▼
+[ UI View ]  [ AI Chat Refinement Loop ]  [ Export Engine ]
+               │                          ├──► PDF Export (ReportLab/fpdf)
+               ▼                          └──► Calendar Export (.ics)
+    [ Selective State Update ]
