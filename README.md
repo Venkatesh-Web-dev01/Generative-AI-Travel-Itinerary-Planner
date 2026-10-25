@@ -227,3 +227,25 @@ An intelligent, Streamlit-based web application that transforms basic travel par
                │                          ├──► PDF Export (ReportLab/fpdf)
                ▼                          └──► Calendar Export (.ics)
     [ Selective State Update ]
+
+    Natural Language Refinement Decision Tree
+
+    [ User Sends Chat Message ]
+            │
+            ▼
+[ Parse Intent via Gemini ]
+            │
+    ┌───────┴──────────────────────────────────┐
+    ▼                                          ▼
+[ Partial Change ]                         [ Global Change ]
+(e.g., "Swap dinner on Day 2")             (e.g., "Cut total budget by 30%")
+    │                                          │
+    ▼                                          ▼
+Re-generate target day/activity only       Re-generate full itinerary structure
+    │                                          │
+    └──────────────────┬───────────────────────┘
+                       ▼
+             [ Update Budget Summary ]
+                       │
+                       ▼
+        [ Update Streamlit Session State ]
