@@ -93,15 +93,6 @@ If no key is available from either source, the app automatically switches
 to an **offline demo generator** so the full workflow (itinerary, chat edits,
 PDF, calendar) can still be tested without internet access or a key.
 
-## Running the Application
-
-```bash
-streamlit run app.py
-```
-
-Streamlit will print a local URL (usually `http://localhost:8501`) — open it
-in your browser.
-
 ## Example Trip
 
 ```
