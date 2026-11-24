@@ -46,6 +46,17 @@ Refine the plan through a natural-language chat interface, then export it as a *
 - **Python `datetime`** — date/time scheduling logic
 - **Custom `.ics` builder** — calendar export (no extra dependency required)
 
+## 🛠️ Technology Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend / UI** | `Streamlit` | Web interface and session state management |
+| **AI Engine** | `Google Gemini API` (`google-genai`) | Itinerary generation & chat-based edits |
+| **Data Handling** | `Pandas` | CSV handling for sample destination quick-picks |
+| **PDF Export** | `ReportLab` | Formatted downloadable PDF itineraries |
+| **Calendar Export** | Custom `.ics` builder + `datetime` | Native calendar file generation |
+| **Config** | `python-dotenv` | Environment variable management |
+
 ## Folder Structure
 
 ```
