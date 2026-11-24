@@ -30,10 +30,7 @@ Refine the plan through a natural-language chat interface, then export it as a *
 * **💰 Budget Monitoring:** Dynamically compares estimated activity and accommodation costs against the target budget, displaying visual warnings when limits are exceeded.
 * **💬 Incremental Refinement:** Chat edits target specific days or activities without wiping existing session data.
 * **🔒 Export Guards:** Export functionalities (`PDF` / `.ics`) are conditionally enabled only after a valid itinerary payload is generated.
-- **Date & Duration Parsing:** Ensures end dates follow start dates and automatically calculates total trip duration.
-- **Budget Monitoring:** Dynamically compares estimated activity/accommodation costs against target budget, displaying visual warnings when limits are exceeded.
-- **Incremental Refinement:** Chat edits target specific days or activities without wiping existing session data.
-- **Export Guards:** Export functionalities (PDF/.ics) are conditionally enabled only after a valid itinerary payload is generated.
+
 
 ## Technology Stack
 
