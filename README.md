@@ -11,7 +11,7 @@ export it as a PDF or a calendar (`.ics`) file.
 # ✈️ Generative AI Travel Itinerary Planner
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=black)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=black)](https://streamlit.io/)
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
 
 A Streamlit web app that turns a destination, budget, trip duration, and a few preferences into a detailed, day-by-day travel itinerary — complete with activities, food recommendations, transportation logistics, and a budget breakdown.
